@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Collab - Online Code Share | Pi7</title>
+    <meta name="description" content="Pi7 collab is a free and online collaborative code editor. On this platform, you can share code online with your team or students.">
+    <meta content="Pi7 Organisation" name="author" />
+    <link rel="stylesheet" href="/static/css/new_style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon/favicon-16x16.png">
+</head>
+
+<body>
+    <!-- partial:index.partial.html -->
+    <nav class="main-menu bg-navy">
+        <ul>
+            <li class="logoli">
+
+                <img class="logo" width="65px" src="/static/col.webp">
+                <div><span class="nav-textlog">Pi7 Collab</span>
+                    <span id="loggtagline">Let's Make It Together</span>
+                </div>
+
+            </li>
+            <li class="has-subnav hidep">
+                <a href="#" class="hasssb">
+                    <i class="material-icons ma ma-2x">edit</i>
+                    <span class="nav-text">Anyone Can Edit
+                        <input type="checkbox" checked class="swithimp" hidden="hidden" id="superedit">
+                <label class="switch switchinc" for="superedit"></label></span>
+                    </span>
+                </a>
+            </li>
+
+            <li onclick="openFullscreen()" id="fullscr" class="has-subnav">
+                <a href="#">
+                    <i class="material-icons ma ma-2x">fullscreen</i>
+                    <span id="fscreen" class="nav-text">Full Screen</span>
+                </a>
+            </li>
+            <li onclick="closeFullscreen()" id="exitscr" class="has-subnav">
+                <a href="#">
+                    <i class="material-icons ma ma-2x">fullscreen_exit</i>
+                    <span id="fscreen" class="nav-text">Exit Full Screen</span>
+                </a>
+            </li>
+            <li class="has-subnav">
+                <a id="downloatext" href="#">
+                    <i class="material-icons ma ma-2x">download</i>
+                    <span class="nav-text">Download</span>
+                </a>
+            </li>
+
+            <li class="has-subnav">
+                <a href="#" class="hasssb">
+                    <i class="material-icons ma ma-2x">supervised_user_circle</i>
+                    <span class="nav-text">Users</span>
+
+
+                </a>
+                <div class="ssbmn" id="user_list">
+
+                </div>
+            </li>
+
+        </ul>
+
+        <ul class="logout">
+            <li><span id='timer'>0:00</span></li>
+            <li>
+                <a href="#" onclick="close_window();">
+                    <i class="material-icons ma ma-2x">settings_power</i>
+                    <span class="nav-text">Close Collab
+                        </span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- partial -->
+    <div id="maincon" class="maincont">{%if organiser%}&lt;h1&gt; Pi7 Collab &lt;/h1&gt;{%endif%}</div>
+    <a title="Settings" href="javascript:void(0);" id="menu_cion" class="menu_icon">
+        <i class="material-icons sideic">settings</i>
+
+    </a>
+    <a title="Conference Call" href="javascript:void(0);" id="vid_cion" class="vid_cion">
+        <i id="vidic" class="material-icons sideic">duo</i>
+    </a>
+    <div id="menu">
+        <div class="linksh">
+            <img height='50' src="/static/useric.png">
+            <span class="lightspan byspan">Organizer:</span>
+            <span class="lightspan user_sapn">{{data.name}}</span><br/>
+        </div>
+        <div class="linksh hidelink">
+            <span class="lightspan unsetcaps byspan"><i class="material-icons fa-user ma ma-2x">person</i> <b id="username">UserName</b> <i id="usernameedit" title="Edit User Name" class="material-icons fa-edit ma ma-2x">edit</i></span><br/>
+        </div>
+        <div class="linksh">
+            <span class="lightspan">Collab Link</span><br/>
+            <input id="link_inp" type="text" readonly value="https://collab.pi7.org/{{data.uri}}">
+            <i onclick="copy_to_clip()" title="Copy URL" id="copy_link" class="material-icons ma ma-2x">file_copy</i>
+        </div>
+        <div class="linksh">
+            <span class="lightspan">Language</span><br/>
+            <select id="modesl">
+                
+            </select>
+        </div>
+        <div class="linksh">
+            <span class="lightspan">Themes</span><br/>
+            <select id="themesl">
+            </select>
+        </div>
+        <div class="linksh">
+            <span class="lightspan inlinespan">Toggle Wrap</span>
+            <input id="wraptext" type="checkbox">
+        </div>
+        <div class="linksh">
+            <span class="lightspan inlinespan">Autocomplete</span>
+            <input id="autocomp" type="checkbox" checked>
+        </div>
+    </div>
+    <div id="vidcon">
+        <div class="maincall">
+            <div class="mycallbar">
+                <video id="local_video" autoplay muted style="max-height: 100%; max-width: 100%;"></video>
+            </div>
+            <div class="mic_vid">
+                <center>
+                    <button id="micbtn" class="round">
+                <i id="micic" class="material-icons">mic_off</i>
+            </button>
+                    <button id="vidbtn" class="round">
+                <i id="vidicm" class="material-icons">videocam_off</i>
+            </button>
+                </center>
+            </div>
+        </div>
+        <div id="caller_list" class="callbar">
+
+        </div>
+
+    </div>
+    <!-- POUPUPS -->
+    <div class="popup">
+        <h2>Create New Collab Pad</h2>
+        <p>Enter Your Name And Start Editing With Your Team As Admin. Check Sides Bars On Left And Right Side For More Control On Your Team.</p>
+        <div class="email_insert">
+
+            <input onkeydown="return event.key != 'Enter';" id="nameinp" type="text" name="name" placeholder="Your Name">
+            <a href="#" id="startcollab">Start</a>
+            <a href="#" id="joincollab">Join</a>
+
+        </div>
+    </div>
+    <a class="button" id="editpopup" href="#popup1"></a>
+    <div id="popup1" class="edit_overlay">
+        <div class="edit_popup">
+            <h2>Editing Mode On</h2>
+            <a class="close" href="#">&times;</a>
+            <div class="content">
+                Only One User At Time Can Edit Collab Pad. Do You Want To Edit Text.
+            </div>
+            <button id="editon">Edit Pad</button>
+        </div>
+    </div>
+    <div id="snackbar"></div>
+</body>
+<script src="/static/socket.io.js"></script>
+<script src="/static/ed_src/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/ed_src/ext-language_tools.js"></script>
+<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+<script>
+    var uid;
+    var socket = io.connect('/', {
+        'path': '/collab.io'
+    });
+</script>
+{%if data%}
+<script src="https://unpkg.com/peerjs@1.3.2/dist/peerjs.min.js"></script>
+<script>
+    var guid = function() {
+        return Date.now().toString(36) + Math.random().toString(36).substr(2);
+    }
+    if (localStorage.hasOwnProperty('clbuid')) {
+        uid = localStorage.getItem('clbuid')
+    } else {
+        uid = guid();
+        localStorage.setItem('clbuid', uid)
+    }
+    var peer = new Peer(uid);
+</script>
+<script src="/static/network.js"></script>
+{%endif%}
+<script src="/static/script.js"></script>
+<script>
+    var editor = ace.edit("maincon");
+
+    $('#maincon').width(window.innerWidth - 100)
+    editor.resize()
+    editor.setTheme("ace/theme/pastel_on_dark");
+    editor.session.setMode("ace/mode/plain_text");
+    editor.setOptions({
+        enableBasicAutocompletion: true,
+        enableSnippets: true,
+        enableLiveAutocompletion: true
+    });
+</script>
+
+{%if not data%}
+<script>
+    $(document).ready(function() {
+        popupSet();
+        var uid = guid();
+        localStorage.setItem('clbuid', uid)
+    });
+    var c_name, admin, c_uri, orgtab, v_room;
+</script>
+{%else%}
+<script>
+    var c_name = "{{data.uri}}";
+    var admin = "{{data.clbuid}}";
+    var c_uri = "{{data.uri}}"
+    localStorage.setItem('orga_id', "{{data.clbuid}}");
+    var orga_id = "{{data.clbuid}}";
+    var orgtab = false;
+    var v_room = 'Vid_' + c_uri;
+    //$('#menu_cion').click();
+</script>
+{%if organiser%}
+<script>
+    localStorage.setItem('orga', "{{organiser}}");
+    var user_n = "{{data.name}}";
+    localStorage.setItem('uname', user_n)
+    var orgtab = true;
+    setuser()
+    editor.selectAll()
+</script>
+{%else%}
+<script>
+    if (localStorage.hasOwnProperty('uname')) {
+        var already_user = true;
+        var user_n = localStorage.getItem('uname');
+        setuser()
+    } else {
+        createuserpop()
+        popupSet();
+    }
+</script>
+{%endif%} {%endif%}
+
+</html>
